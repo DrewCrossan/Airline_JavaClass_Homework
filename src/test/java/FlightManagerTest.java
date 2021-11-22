@@ -3,12 +3,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class FlightTest {
+public class FlightManagerTest {
 
+    FlightManager flightManager1, flightManager2;
     Flight flight1, flight2;
     Pilot pilot1, pilot2, firstOfficer;
     Plane plane1, plane2;
-    Passenger passenger1, passenger2;
+    Passenger passenger1;
     CabinCrewMember crewMember1;
 
     @Before
@@ -17,49 +18,37 @@ public class FlightTest {
         pilot2 = new Pilot("Gemma", RankType.CAPTAIN, "GMCC92");
         firstOfficer = new Pilot("Harley", RankType.FIRST_OFFICER, "HRLY19");
         crewMember1 = new CabinCrewMember("Lily", RankType.PURSER);
+        passenger1 = new Passenger("David", 2, flight2.getFlightNum());
         plane1 = new Plane(PlaneType.BOEING747);
         plane2 = new Plane(PlaneType.AIRBUS350);
         flight1 = new Flight(pilot1, plane1, "1", "GLA", "EDI", "15:00");
         flight2 = new Flight(pilot2, plane2, "2", "LDN", "EDI", "16:00");
-        passenger1 = new Passenger("David", 2, null);
-        passenger2 = new Passenger("John", 1, null);
-
-
+        flightManager1 = new FlightManager(flight1);
+        flightManager2 = new FlightManager(flight2);
     }
 
     @Test
-    public void getPlaneCapacity(){
-        assertEquals(500, flight1.getRemainingSeats());
-        assertEquals(300, flight2.getRemainingSeats());
+    public void getPassengerReservedWeight(){
+        assertEquals(165000, flightManager1.reservedBaggageWeight());
+        assertEquals(125000, flightManager2.reservedBaggageWeight());
     }
 
     @Test
-    public void addPassengerToPlane(){
+    public void getPassengerBaggageWeight(){
+        assertEquals(330, flightManager1.passengerBaggageLimit());
+        assertEquals(416, flightManager2.passengerBaggageLimit());
+    }
+
+    @Test
+    public void getRemainingTotalBaggageWeight(){
         flight1.addPassenger(passenger1);
         flight1.addPassenger(passenger1);
         flight1.addPassenger(passenger1);
-        flight1.addCrewMember(crewMember1);
-        assertEquals(496, flight1.getRemainingSeats());
-        assertEquals(3, flight1.numberOfPassengers());
-    }
+        flight2.addPassenger(passenger1);
+        flight2.addPassenger(passenger1);
+        flight2.addPassenger(passenger1);
+        assertEquals(164010, flightManager1.totalRemainingPassengerWeight());
+        assertEquals(123752, flightManager2.totalRemainingPassengerWeight());
 
-    @Test
-    public void addCrewToPlane(){
-        flight2.addCrewMember(crewMember1);
-        flight2.addCrewMember(crewMember1);
-        flight2.addCrewMember(crewMember1);
-        flight2.addPassenger(passenger1);
-        flight2.addPassenger(passenger1);
-        flight2.addPassenger(passenger1);
-        assertEquals(294, flight2.getRemainingSeats());
-        assertEquals(3, flight2.numberOfCabinCrew());
-    }
-
-    @Test
-    public void getPassengerFlightNum(){
-        flight2.addPassenger(passenger1);
-        flight1.addPassenger(passenger2);
-        assertEquals("2", passenger1.getFlight());
-        assertEquals("1", passenger2.getFlight());
     }
 }

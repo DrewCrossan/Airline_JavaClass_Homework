@@ -29,6 +29,7 @@ public class Flight {
 
     public void addPassenger(Passenger passenger){
         if((passengers.size() + flightCrew.size()) < plane.getPlaneCapacity()) {
+            passenger.setFlight(flightNum);
             this.passengers.add(passenger);
         }
     }
@@ -40,11 +41,21 @@ public class Flight {
 
     }
 
+    public Plane getPlane() {
+        return plane;
+    }
+
+    public String getFlightNum() {
+        return flightNum;
+    }
+
     public int numberOfPassengers(){
+
         return passengers.size();
     }
 
     public int numberOfCabinCrew(){
+
         return flightCrew.size();
     }
 

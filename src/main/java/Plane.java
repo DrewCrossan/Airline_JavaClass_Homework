@@ -9,4 +9,8 @@ public class Plane {
     public int getPlaneCapacity() {
         return plane.getCapacity();
     }
+
+    public int getPlaneWeight(){
+        return plane.getTotalWeight();
+    }
 }
